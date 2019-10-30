@@ -1,3 +1,19 @@
+/*
+***********************************************************************************
+ Nombre Del Script:        Servidor
+ Trabajo Practico Nro.:    3
+ Ejercicio Nro.:           2
+ Entrega Nro.:             1
+ Integrantes:
+    Apellido            Nombre                  DNI
+    --------------------------------------------------
+   Krasuk               Joaquín               40745090
+   Rodriguez            Christian             37947646
+   Vivas                Pablo                 38703964
+   Ramos		        Maximiliano		      35068917
+   Fernández		    Jonathan		      37226233
+***********************************************************************************
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -5,12 +21,13 @@
 #include <unistd.h>
 #include <string.h>
 #include <pthread.h>
-#define CANTPARDATOS 10
+
 double res=0;
 int pos=0;
 int sumXthreads=0,sumXthreadsRest=0;
 int contHilos=0;
 int cantThreads=0;
+int cantDatos=0;
 pthread_mutex_t mutex1;
 
 typedef struct entrada{
@@ -19,8 +36,9 @@ double valor2;
 }t_dato;
 
 int validarParametros(int argc, char *argv[]);
-int leerDatos(t_dato datos[]);
+int leerDatos(t_dato datos[],char *path);
 void mostrarDatos(t_dato datos[]);
+void guardarRes(double res,char *pathRes);
 
 
 
@@ -36,6 +54,7 @@ void * suma(void *args){
 	ini=pos;
 	fin=ini+sumXthreads;
 	    printf("Hilo_______________________________________ %d\n",contHilos+1);
+	
 	
 	if(sumXthreadsRest!=0){
 		fin=fin+1;
@@ -59,7 +78,7 @@ void * suma(void *args){
 		printf("RESULTADO TOTAL PARCIAL DE %d HILOS %lf\n",contHilos+1,res);
 		contHilos++;
 		printf("_______________________________________________\n\n");
-		sleep(1);
+		//sleep(1);
 		pthread_mutex_unlock(&mutex1);
 		
 		pthread_exit(NULL);
@@ -81,34 +100,36 @@ int main(int argc, char *argv[])
 	}
 	
 	if(strcmp(argv[1],"-help")==0){
-	printf("Este programa suma 2 vectores almacenados en un archivo datos.txt diviendo el trabajo en n threads pasado por parametro.\n");
-	printf("Ejemplo de ejecucion: ./ejercicio2 4(cantidad de threads)\n");
+	printf("Este programa suma 2 vectores almacenados en un archivo .txt diviendo el trabajo en n threads pasado por parametro junto con el path del archivo de datos y el path de salida.\n");
+	printf("Ejemplo de ejecucion: ./ejercicio2 [cantThreads] [pathDatos] [pathResultado] \n");
 	return 0;
 	}
-	
-	
-	t_dato datos[CANTPARDATOS];
-	
 	int t;
+	t_dato datos[500];
+	char path[500],pathRes[500];
+	pthread_t *tid;
+	
+	strcpy(path,argv[2]);
+	strcpy(pathRes,argv[3]);
+	
+	cantDatos=leerDatos(datos,path);
+	
 	
 	pthread_mutex_init(&mutex1, NULL);
 	
-	pthread_t *tid;
-
-	
 	
 	cantThreads = atoi(argv[1]);
-	if(cantThreads > CANTPARDATOS){
+	if(cantThreads > cantDatos){
 	
-	printf("ERROR LA CANTIDAD MAXIMA DE THREADS ES %d\n",CANTPARDATOS);
+	printf("ERROR LA CANTIDAD MAXIMA DE THREADS ES %d\n",cantDatos);
 	return 0;
 	}
 	
-	leerDatos(datos);
+	
 	mostrarDatos(datos);
 	
-	sumXthreads= CANTPARDATOS/cantThreads;
-	sumXthreadsRest= CANTPARDATOS%cantThreads;
+	sumXthreads= cantDatos/cantThreads;
+	sumXthreadsRest= cantDatos%cantThreads;
     
 	
 	tid = (pthread_t*) calloc(cantThreads, sizeof(pthread_t));
@@ -129,6 +150,10 @@ int main(int argc, char *argv[])
 	
 	printf("Cantidad de threads:%d\n",cantThreads);
 	printf("RESULTADO TOTAL:%lf\n",res);
+	
+	
+	guardarRes(res,pathRes);
+	
 	return 0;
 }
 	
@@ -136,19 +161,25 @@ int main(int argc, char *argv[])
 	
 int validarParametros(int argc, char *argv[])
 {
-if(argv[1]==NULL || argc!=2){
+if((/*strcmp(argv[1],"-help")!=0 ||*/ argc==1 || argc==3 || argc>4 || ( argc==2 && strcmp(argv[1],"-help")!=0) )){
+	
+	
      printf("Error en parametros.\n");
      return 0;
+     
      }
-    return 1;
+    
+    
+    
+    return 2;
 }
 
-int leerDatos(t_dato datos[])	{
+int leerDatos(t_dato datos[],char *path)	{
 
   FILE *fp;
-  int i;
+  int i=0;
   
-  fp=fopen("datos.txt","rt");
+  fp=fopen(path,"rt");
   
  if(fp==NULL)
 {
@@ -156,19 +187,35 @@ int leerDatos(t_dato datos[])	{
     return 0; 
 }
 
-for(i=0; i<CANTPARDATOS ; i++)
+while(!feof(fp))
 {
-	fscanf(fp,"%lf,%lf",&datos[i].valor1,&datos[i].valor2);
+    fscanf(fp,"%lf,%lf",&datos[i].valor1,&datos[i].valor2);
+    i=i+1;
+    
 }
 fclose(fp);
-return 1;
+return i-1;
 }
 
 void mostrarDatos(t_dato datos[]){
 	int i;
 	printf("DATOS____________________________\n");
-	for(i=0; i<CANTPARDATOS ; i++){
+	for(i=0; i<cantDatos ; i++){
 	printf("Valor 1:%.2lf   Valor 2: %.2lf\n",datos[i].valor1,datos[i].valor2);
 	}
 	printf("\n\n\n");
 }
+void guardarRes(double res,char *pathRes){
+
+  FILE *fp;
+  
+  
+  fp=fopen(pathRes,"wt");
+  
+  fprintf(fp,"%lf",res);
+
+
+fclose(fp);
+
+}
+
