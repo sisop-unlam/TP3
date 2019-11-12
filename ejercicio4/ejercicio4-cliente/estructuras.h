@@ -21,9 +21,7 @@ typedef struct
 typedef struct
 {
     pid_t pid; ///El cliente manda un identificador al servidor.
-    int opcion;
     t_comando comando;
-    t_articulo articulo;
 } t_msgCliente;
 
 typedef struct

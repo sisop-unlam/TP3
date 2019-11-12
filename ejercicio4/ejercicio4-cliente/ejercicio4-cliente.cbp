@@ -31,9 +31,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="main.c">
+		<Unit filename="cliente.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="estructuras.h" />
+		<Unit filename="funcionesCliente.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="funcionesCliente.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

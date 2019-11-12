@@ -33,36 +33,34 @@ int main(int argc, char *argv[]){
     t_msgCliente* msgCliente = shmat(escribirAServidor, NULL, 0);
     t_msgServidor* msgServidor = shmat(leerDeServidor, NULL, 0);
 
-
-
-    //Variable donde se almacena el nombre de la materia ingresado.
-    char materia[500];
+    //Variable donde almaceno la query
+    char consulta[500];
 
     ///Validacion de parametros.
     if(argc < 2 || argc > 3)
     {
-        printf("Error, debe pasar la Materia a la que pertenece\n");
+        printf("Error, ingrese una query valida\n");
         return 20;
     }
     if(argc == 2 && ((strcmp(argv[1],"-help")==0) || (strcmp(argv[1],"-h") == 0) || (strcmp(argv[1],"-?") == 0)))
     {
-        printf("La sintaxis es ./Client [Materia]\nFormato: ./Client [string]\nEjemplo: ./Client Algebra\n");
+        printf("La sintaxis es ./Cliente [Consulta]\nFormato: ./Cliente [string]\nEjemplo: ./Cliente PRODUCTO=HELADO\n");
         return 30;
     }
 
-    ///Normalizacion de materia.
-    strcpy(materia,argv[1]);
-    normalizar(materia);
+    ///COPIO LA CONSULTA A LA VARIABLE, PARA PROCESARLO
+    strcpy(consulta,argv[1]);
+
+    //Necesario para eliminar espacios en blanco, etc
+    normalizar(consulta);
 
     cls();
 
     ///IDENTIFICADOR DEL CLIENTE.
     msgCliente->pid = getpid();
 
-    printf("Bienvenido, Profesor de %s\n", materia);
-
     ///Ir al menu
-    menu(clientePuedeEscribir, clienteAServidor, servidorACliente, msgCliente, msgServidor, materia);
+    obtenerRegistros(clientePuedeEscribir, clienteAServidor, servidorACliente, msgCliente, msgServidor, consulta);
 
     ///En este punto el cliente ya termino de realizar sus funciones.
 
