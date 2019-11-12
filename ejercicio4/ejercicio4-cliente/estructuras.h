@@ -13,9 +13,8 @@ typedef struct
 typedef struct
 {
     int item_id;
-    char materia[50];
-    char producto[50];
-    char marca[50];
+    char parametro[50];
+    char parametroBuscado[50];
 } t_comando;
 
 typedef struct

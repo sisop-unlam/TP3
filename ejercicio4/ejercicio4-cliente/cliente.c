@@ -10,7 +10,8 @@
 #include "funcionesCliente.h"
 
 ///Flujo MAIN->MENU->ACCION QUE QUIERE LLEVAR A CABO EL CLIENTE.
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[])
+{
 
     ///Apertura de semaforos y memoria compartida
     sem_t *clientePuedeEscribir = sem_open("/clientePuedeEscribir", 0);
@@ -51,7 +52,7 @@ int main(int argc, char *argv[]){
     ///COPIO LA CONSULTA A LA VARIABLE, PARA PROCESARLO
     strcpy(consulta,argv[1]);
 
-    //Necesario para eliminar espacios en blanco, etc
+    ///Necesario para eliminar espacios en blanco, etc
     normalizar(consulta);
 
     cls();
