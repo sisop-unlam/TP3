@@ -1,7 +1,18 @@
 # depslib dependency file v1.0
-1571521665 source:/home/szk/Desktop/TP3/ejercicio4/ejercicio4-cliente/funcionesCliente.c
+1573559075 source:/home/szk/Desktop/TP3/ejercicio4/ejercicio4-cliente/funcionesCliente.c
+	<stdlib.h>
+	<unistd.h>
+	<stdio.h>
+	<string.h>
+	<ctype.h>
+	<semaphore.h>
+	<sys/ipc.h>
+	<sys/shm.h>
+	<fcntl.h>
+	"estructuras.h"
+	"funcionesCliente.h"
 
-1573558359 source:/home/szk/Desktop/TP3/ejercicio4/ejercicio4-cliente/cliente.c
+1573559113 source:/home/szk/Desktop/TP3/ejercicio4/ejercicio4-cliente/cliente.c
 	<stdlib.h>
 	<unistd.h>
 	<stdio.h>
@@ -13,7 +24,7 @@
 	"estructuras.h"
 	"funcionesCliente.h"
 
-1573558700 /home/szk/Desktop/TP3/ejercicio4/ejercicio4-cliente/estructuras.h
+1573561402 /home/szk/Desktop/TP3/ejercicio4/ejercicio4-cliente/estructuras.h
 
 1573559083 /home/szk/Desktop/TP3/ejercicio4/ejercicio4-cliente/funcionesCliente.h
 
