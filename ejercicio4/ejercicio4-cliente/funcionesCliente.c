@@ -10,7 +10,7 @@
 #include "estructuras.h"
 #include "funcionesCliente.h"
 
-void obtenerRegistros(sem_t * clientePuedeEscribir, sem_t * clienteAServidor, sem_t * servidorACliente, t_msgCliente* msgCliente, t_msgServidor* msgServidor, char* consulta)
+void obtenerRegistros(sem_t * puedeEnviar, sem_t * clientePuedeEscribir, sem_t * clienteAServidor, sem_t * servidorACliente, t_msgCliente* msgCliente, t_msgServidor* msgServidor, char* consulta)
 {
     t_comando dat;
 
@@ -55,12 +55,17 @@ void obtenerRegistros(sem_t * clientePuedeEscribir, sem_t * clienteAServidor, se
     ///RECEPCION DE INFORMACION DEL SERVIDOR
 
     //Si puedo recibir informacion del servidor, entonces recibo.
-    sem_wait(servidorACliente);
 
     ///Comprobacion si efectivamente el mensaje enviado por el servidor es para mi.
-    if(msgServidor->pid == msgCliente->pid)
+    while (strcmp(msgServidor->respuesta,"FIN") != 0)
     {
-        printf("\n%s", msgServidor->respuesta);
+        sem_wait(servidorACliente);
+
+        if(msgServidor->pid == msgCliente->pid && strcmp(msgServidor->respuesta,"FIN") != 0)
+        {
+            printf("%s\n", msgServidor->respuesta);
+        }
+        sem_post(puedeEnviar);
     }
 }
 

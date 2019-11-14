@@ -17,6 +17,8 @@ int main(int argc, char *argv[])
     sem_t *clientePuedeEscribir = sem_open("/clientePuedeEscribir", 0);
     sem_t *clienteAServidor = sem_open("/clienteAServidor", 0);
     sem_t *servidorACliente = sem_open("/servidorACliente", 0);
+    sem_t *puedeConsultar = sem_open("/puedeConsultar", 0);
+    sem_t *puedeEnviar = sem_open("/puedeEnviar", 0);
 
     ///Primero compruebo si los segmentos de memoria compartida ya fueron creados.
     ///Si la respuesta es que no fueron creados, entonces el servidor no inicio todavia, por ende error.
@@ -61,7 +63,7 @@ int main(int argc, char *argv[])
     msgCliente->pid = getpid();
 
     ///Ir al menu
-    obtenerRegistros(clientePuedeEscribir, clienteAServidor, servidorACliente, msgCliente, msgServidor, consulta);
+    obtenerRegistros(puedeEnviar,clientePuedeEscribir, clienteAServidor, servidorACliente, msgCliente, msgServidor, consulta);
 
     ///En este punto el cliente ya termino de realizar sus funciones.
 
