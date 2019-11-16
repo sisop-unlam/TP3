@@ -8,7 +8,7 @@
 #define PRODUCTO "PRODUCTO"
 #define ID "ID"
 
-void obtenerRegistros(sem_t * puedeEnviar,sem_t *, sem_t *, sem_t *, t_msgCliente*, t_msgServidor*, char*);
+void obtenerRegistros(sem_t * puedeConsultar,sem_t * puedeEnviar,sem_t *, sem_t *, sem_t *, t_msgCliente*, t_msgServidor*, char*);
 int normalizar(char*);
 void explode(const char *src, const char *tokens, char ***list, size_t *len);
 
