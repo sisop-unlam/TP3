@@ -10,7 +10,7 @@
 #include "estructuras.h"
 #include "funcionesCliente.h"
 
-void obtenerRegistros(sem_t *puedeConsultar, sem_t *puedeEnviar, sem_t *clientePuedeEscribir, sem_t *clienteAServidor, sem_t *servidorACliente, t_msgCliente *msgCliente, t_msgServidor *msgServidor, char *consulta)
+void obtenerRegistros(sem_t *puedeConsultar, sem_t *clientePuedeEscribir, sem_t *clienteAServidor, sem_t *servidorACliente, t_msgCliente *msgCliente, t_msgServidor *msgServidor, char *consulta)
 {
     t_comando dat;
 
@@ -65,18 +65,9 @@ void obtenerRegistros(sem_t *puedeConsultar, sem_t *puedeEnviar, sem_t *clienteP
         {
 
             printf("%s\n", msgServidor->respuesta);
-            printf("\nestoy aca\n");
         }
 
-        sem_post(puedeEnviar);
-        int value;
-        sem_getvalue(puedeEnviar, &value);
-        printf("[PUEDE ENVIAR CLIENTE]%d\n", value);
-
         sem_post(clientePuedeEscribir);
-        int value2;
-        sem_getvalue(clientePuedeEscribir, &value2);
-        printf("[clientePuedeEscribir CLIENTE]%d\n", value2);
     }
 }
 

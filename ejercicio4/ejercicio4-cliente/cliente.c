@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
     sem_t *clienteAServidor = sem_open("/clienteAServidor", 0);
     sem_t *servidorACliente = sem_open("/servidorACliente", 0);
     sem_t *puedeConsultar = sem_open("/puedeConsultar", 0);
-    sem_t *puedeEnviar = sem_open("/puedeEnviar", 0);
 
     ///Primero compruebo si los segmentos de memoria compartida ya fueron creados.
     ///Si la respuesta es que no fueron creados, entonces el servidor no inicio todavia, por ende error.
@@ -57,19 +56,16 @@ int main(int argc, char *argv[])
     ///Necesario para eliminar espacios en blanco, etc
     normalizar(consulta);
 
-    cls();
-
     ///IDENTIFICADOR DEL CLIENTE.
     msgCliente->pid = getpid();
 
     ///Ir al menu
-    obtenerRegistros(puedeConsultar,puedeEnviar, clientePuedeEscribir, clienteAServidor, servidorACliente, msgCliente, msgServidor, consulta);
+    obtenerRegistros(puedeConsultar, clientePuedeEscribir, clienteAServidor, servidorACliente, msgCliente, msgServidor, consulta);
 
     sem_close(clientePuedeEscribir);
     sem_close(clienteAServidor);
     sem_close(servidorACliente);
     sem_close(puedeConsultar);
-    sem_close(puedeEnviar);
     //La eliminacion de las memorias compartidas es realizada por el servidor.
     return 0;
 }

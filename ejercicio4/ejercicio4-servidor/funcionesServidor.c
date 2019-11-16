@@ -10,12 +10,12 @@
 #include "funcionesServidor.h"
 
 ///Funcion que busca resultados coincidentes con lo pedido
-void procesarConsulta(sem_t *clientePuedeEscribir, sem_t *puedeEnviar, sem_t *servidorACliente, t_msgCliente *msgCliente, t_msgServidor *msgServidor, char *bd)
+void procesarConsulta(sem_t *clientePuedeEscribir, sem_t *servidorACliente, t_msgCliente *msgCliente, t_msgServidor *msgServidor, char *bd)
 {
-    sem_wait(clientePuedeEscribir);
+    //sem_wait(clientePuedeEscribir);
     //Log del servidor.
     printf("\nSe recibio la consulta %s=%s", msgCliente->comando.parametro, msgCliente->comando.parametroBuscado);
-    sem_post(clientePuedeEscribir);
+    //sem_post(clientePuedeEscribir);
 
     FILE *arch = fopen(bd, "rt");
     if (!arch)
@@ -34,7 +34,6 @@ void procesarConsulta(sem_t *clientePuedeEscribir, sem_t *puedeEnviar, sem_t *se
             if (strcmp(art.marca, d.parametroBuscado) == 0)
             {
                 printf("\n%s", art.producto);
-                sem_wait(puedeEnviar);
                 sem_wait(clientePuedeEscribir);
                 sprintf(msgServidor->respuesta, "%d|%s|%s|%s\n", art.item_id, art.producto, art.marca, art.articulo);
                 msgServidor->pid = msgCliente->pid;
@@ -45,23 +44,15 @@ void procesarConsulta(sem_t *clientePuedeEscribir, sem_t *puedeEnviar, sem_t *se
         else */
         if (strcmp(d.parametro, PRODUCTO) == 0)
         {
+
             if (strcmp(art.producto, d.parametroBuscado) == 0)
             {
-
-                int value2;
-                sem_getvalue(clientePuedeEscribir, &value2);
-                printf("[clientePuedeEscribir sv]%d\n", value2);
-                int value;
-                sem_getvalue(puedeEnviar, &value);
-                printf("[PUEDE ENVIAR sv]%d\n", value);
-
-                sem_wait(puedeEnviar);
-
                 sem_wait(clientePuedeEscribir);
-
+                printf("%d|%s|%s|%s\n", art.item_id, art.producto, art.marca, art.articulo);
                 sprintf(msgServidor->respuesta, "%d|%s|%s|%s\n", art.item_id, art.producto, art.marca, art.articulo);
                 msgServidor->pid = msgCliente->pid;
                 sem_post(clientePuedeEscribir);
+
                 sem_post(servidorACliente);
             }
         } /*
@@ -69,7 +60,6 @@ void procesarConsulta(sem_t *clientePuedeEscribir, sem_t *puedeEnviar, sem_t *se
         {
             if (art.item_id, atoi(d.parametroBuscado) == 0)
             {
-                sem_wait(puedeEnviar);
                 sem_wait(clientePuedeEscribir);
                 sprintf(msgServidor->respuesta, "%d|%s|%s|%s\n", art.item_id, art.producto, art.marca, art.articulo);
                 msgServidor->pid = msgCliente->pid;
@@ -78,12 +68,15 @@ void procesarConsulta(sem_t *clientePuedeEscribir, sem_t *puedeEnviar, sem_t *se
             }
         }*/
     }
-    sem_wait(puedeEnviar);
     sem_wait(clientePuedeEscribir);
+
     sprintf(msgServidor->respuesta, "%s", "FIN");
     msgServidor->pid = msgCliente->pid;
     sem_post(clientePuedeEscribir);
+
     sem_post(servidorACliente);
+
+    printf("\nFinalizada la consulta para el cliente %d", msgCliente->pid);
     ///voy a tener que armar un mensaje espeical que le avise al usuario que ya termino.
     ///si no, al terminar va a "cerrar" la sesion
     fclose(arch);

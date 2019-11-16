@@ -17,7 +17,6 @@ sem_t *clientePuedeEscribir;
 sem_t *clienteAServidor;
 sem_t *servidorACliente;
 sem_t *puedeConsultar;
-sem_t *puedeEnviar;
 ///SHMID
 int leerDeCliente;
 int escribirACliente;
@@ -42,12 +41,10 @@ void liberarRecursos()
     sem_close(clienteAServidor);
     sem_close(servidorACliente);
     sem_close(puedeConsultar);
-    sem_close(puedeEnviar);
     ///Liberacion de semaforos.
     sem_unlink("/clientePuedeEscribir");
     sem_unlink("/clienteAServidor");
     sem_unlink("/servidorACliente");
-    sem_unlink("/puedeEnviar");
     sem_unlink("/puedeConsultar");
     exit(5);
 }
@@ -77,8 +74,6 @@ int main(int argc, char *argv[])
 
     // Este semaforo es usado por los procesos que quieren realizar consultas
     puedeConsultar = sem_open("/puedeConsultar", O_CREAT, 0666, 1);
-    puedeEnviar = sem_open("/puedeEnviar", O_CREAT, 0666, 1);
-    sem_init(puedeEnviar, 0, 1);
     //Creacion de memoria compartida para recibir la orden del cliente.
     leerDeCliente = shmget(234, sizeof(t_msgCliente), IPC_CREAT | 0666);
     //Al cliente le voy a mandar un char de 500 por ahora, ver despues.
@@ -94,7 +89,7 @@ int main(int argc, char *argv[])
         ///Espero hasta que el semaforo recibirOrden sea activado por un cliente.
         sem_wait(clienteAServidor);
         ///Funcion que procesa la query y su mensaje
-        procesarConsulta(clientePuedeEscribir, puedeEnviar, servidorACliente, msgCliente, msgServidor, bd);
+        procesarConsulta(clientePuedeEscribir, servidorACliente, msgCliente, msgServidor, bd);
         sem_post(puedeConsultar);
     }
 
