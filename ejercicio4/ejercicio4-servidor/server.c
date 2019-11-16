@@ -93,7 +93,6 @@ int main(int argc, char *argv[])
     {
         ///Espero hasta que el semaforo recibirOrden sea activado por un cliente.
         sem_wait(clienteAServidor);
-        printf("\nrecibi consulta\n");
         ///Funcion que procesa la query y su mensaje
         procesarConsulta(clientePuedeEscribir, puedeEnviar, servidorACliente, msgCliente, msgServidor, bd);
         sem_post(puedeConsultar);
