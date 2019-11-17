@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1573957333 source:/home/szk/Desktop/Final/Cliente/main.c
+	"funciones.h"
+
+1573957122 /home/szk/Desktop/Final/Cliente/funciones.h
+	<unistd.h>
+	<sys/wait.h>
+	<fcntl.h>
+	<sys/shm.h>
+	<semaphore.h>
+	<sys/types.h>
+	<sys/stat.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1573957340 source:/home/szk/Desktop/Final/Cliente/funciones.c
+	"funciones.h"
+
