@@ -41,8 +41,6 @@ void *resolverConsulta(t_conexionCliente *conexionCliente, t_request *req, FILE 
 	fscanf(archivo, "%*[^\n]");
 	fgets(linea, 200, archivo);
 
-	printf("\n|-%s", linea);
-	fflush(stdout);
 	char delimitador[] = ";\n";
 	t_articulo art;
 
@@ -60,7 +58,6 @@ void *resolverConsulta(t_conexionCliente *conexionCliente, t_request *req, FILE 
 			char *articulo = strtok(NULL, delimitador);
 			char *producto = strtok(NULL, delimitador);
 			char *marca = strtok(NULL, delimitador);
-			//printf("%s - %s - %s - %s", item_id, articulo, producto, marca);
 
 			if (strcmp(req->campo, "PRODUCTO") == 0 && strcmp(producto, req->valor) == 0)
 			{
@@ -90,6 +87,7 @@ void *resolverConsulta(t_conexionCliente *conexionCliente, t_request *req, FILE 
 			}
 			fgets(linea, 200, archivo);
 		}
+
 		send(conexionCliente->socket, (void *)&art, sizeof(t_articulo), 0);
 		pthread_mutex_unlock(&mutex);
 	}
