@@ -16,7 +16,6 @@
 ***********************************************************************************
 */
 
-
 void getHelp()
 {
     puts("Cliente para hacer consultas sobre un archivo de BD");

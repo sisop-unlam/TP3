@@ -41,8 +41,8 @@ void set(const char* ip, const char* puerto)
 int main(int argc, char *argv[])
 {
 
-    ///Si estoy pidiendole la getHelp
-    if (strcmp(argv[1],"-getHelp") == 0 || strcmp(argv[1],"-h") == 0 || strcmp(argv[1],"-?") == 0)
+    ///Si estoy pidiendole la help
+    if (strcmp(argv[1],"-help") == 0 || strcmp(argv[1],"-h") == 0 || strcmp(argv[1],"-?") == 0)
     {
         getHelp();
     }

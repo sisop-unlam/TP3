@@ -18,14 +18,7 @@
 
 #define TAMQUERY 512
 
-///MAIN
-struct sockaddr_in serverAddress;
-void salir();
-int conexion(int *clientSocket);
-void set(const char *ip, const char *puerto);
-
-///funcionesServidor
 void getHelp();
-void promptConsulta(char *query, char *respuesta, int *longitud, int *clientSocket);
+struct sockaddr_in serverAddress;
 
 #endif // FUNCIONES_H_INCLUDED
