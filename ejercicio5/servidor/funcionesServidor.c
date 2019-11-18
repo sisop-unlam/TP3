@@ -43,6 +43,7 @@ void *resolverConsulta(t_conexionCliente *conexionCliente, t_request *req, FILE 
 
 	char delimitador[] = ";\n";
 	t_articulo art;
+	art.coincidencias = 0;
 
 	if (strcmp(req->campo, "PRODUCTO") == 0 || strcmp(req->campo, "ID") == 0 || strcmp(req->campo, "MARCA") == 0)
 	{
