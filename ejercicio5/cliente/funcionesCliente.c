@@ -7,7 +7,7 @@ void *reciveAndSendInClient(void *args) {
 
     t_client *dataClient = (t_client*)args;
     t_request request;
-	t_articulos articulos;
+	t_articulo articulos;
 	char *tipo;
 	char *valor;
 	char delimitador[2]="=";
@@ -20,8 +20,8 @@ void *reciveAndSendInClient(void *args) {
 		tipo = strtok(dataClient->consulta, delimitador);
 		valor = strtok(NULL, delimitador);
 		
-		strcpy(t_request.campo, tipo);           
-		strcpy(t_request.valor, valor); 
+		strcpy(request.campo, tipo);           
+		strcpy(request.valor, valor); 
 		
 		send(dataClient->socket, (void*)&request, sizeof(t_request), 0); //Envio consulta al servidor
 		

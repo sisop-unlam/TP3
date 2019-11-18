@@ -24,7 +24,7 @@ int main(int argc, char const *argv[]) {
 	}
 	
 	strcpy(param.ipServer,argv[1]);
-	strcpy(param.port,atoi(argv[2]));
+	param.port = atoi(argv[2]);
 	
     if ((client.socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
@@ -61,7 +61,7 @@ void ayuda() {
 	
     puts("Programa Cliente para enviarle consultas al archivo Servidor");
     puts("Los parametros que recibe son la IP donde se encuentra el servidor y el PUERTO");
-	puts("Ejemplo de ejecucion: .\Cliente 192.168.0.1 9000")
+	puts("Ejemplo de ejecucion: .\\Cliente 192.168.0.1 9000");
     puts("Despues podrá realizar las consulta con el formato CAMPO=VALOR");
 	puts("Y para finalizar solo debe escribir QUIT");
     puts("Ejemplos de ejecución:");

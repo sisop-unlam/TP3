@@ -96,8 +96,11 @@ int main(int argc, char const *argv[])
         //Asigno valores a la estructura
         conexionCliente.id=id++;
         conexionCliente.socket = client_socket;
-        conexionCliente.archivo = param.pathDatabase;
-
+        conexionCliente.archivo =  fopen(param.pathDatabase, "r");
+		if(!conexionCliente.archivo){
+			puts("Error al leer el archivo. Es posible que no exista o no tenga permisos de lectura");
+			exit(3);
+		}
         //Creo hilo
         pthread_create(&(conexionCliente.threadId),NULL, reciveAndSendInServer, (void*)&conexionCliente);
 
