@@ -43,7 +43,7 @@ printf("\nReinicio el archivo");fflush(stdout);
 	fscanf(archivo, "%*[^\n]");
 	fgets(linea, 200, archivo);
 	char* e;
-	char delimitador[] = ";\n";
+	char delimitador[] = ";";
 	t_articulo art;
 	art.coincidencias = 0;
 
