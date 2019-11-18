@@ -21,7 +21,6 @@
 #define BD "./articulos.txt"
 #define TAMQUERY 512
 #define MAX_QUEUE 10
-
 ///STRUCT DE ARTICULO
 typedef struct
 {

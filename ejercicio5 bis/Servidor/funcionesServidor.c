@@ -77,12 +77,14 @@ void procesarConsulta(char *query, FILE *arch, int clientSocket)
             {
                 snprintf(linea, sizeof(linea), "%s;%s;%s;%s", bufferItemID, art.articulo, art.producto, art.marca);
                 enviarMensaje(linea, clientSocket, packetSize);
+                usleep(1 * 1000);
                 i++;
             }
             else if (strcmp(tipo, "ID") == 0 && strcmp(bufferItemID, valor) == 0)
             {
                 snprintf(linea, sizeof(linea), "%s;%s;%s;%s", bufferItemID, art.articulo, art.producto, art.marca);
                 enviarMensaje(linea, clientSocket, packetSize);
+                usleep(1 * 1000);
 
                 i++;
             }
@@ -90,7 +92,7 @@ void procesarConsulta(char *query, FILE *arch, int clientSocket)
             {
                 snprintf(linea, sizeof(linea), "%s;%s;%s;%s", bufferItemID, art.articulo, art.producto, art.marca);
                 enviarMensaje(linea, clientSocket, packetSize);
-
+                usleep(1 * 1000);
                 i++;
             }
         }
