@@ -53,23 +53,20 @@ void procesarConsulta(char *consulta, char *memoriaCompartida, sem_t *semaforoMe
 
             if (strcmp(tipo, "PRODUCTO") == 0 && strcmp(art.producto, valor) == 0)
             {
-                strcpy(linea, art.articulo);
-
+                snprintf(linea, sizeof(linea), "%s;%s;%s;%s", bufferItemID, art.articulo, art.producto, art.marca);
                 sendMsg(linea, memoriaCompartida, semaforoMemoria, respuestaEnviada, semaforoEnvio);
                 i++;
             }
             else if (strcmp(tipo, "ID") == 0 && strcmp(bufferItemID, valor) == 0)
             {
-                strcpy(linea, art.articulo);
-
+                snprintf(linea, sizeof(linea), "%s;%s;%s;%s", bufferItemID, art.articulo, art.producto, art.marca);
                 sendMsg(linea, memoriaCompartida, semaforoMemoria, respuestaEnviada, semaforoEnvio);
                 i++;
             }
             else if (strcmp(tipo, "MARCA") == 0 && strcmp(art.marca, valor) == 0)
             {
 
-                strcpy(linea, art.articulo);
-
+                snprintf(linea, sizeof(linea), "%s;%s;%s;%s", bufferItemID, art.articulo, art.producto, art.marca);
                 sendMsg(linea, memoriaCompartida, semaforoMemoria, respuestaEnviada, semaforoEnvio);
                 i++;
             }
