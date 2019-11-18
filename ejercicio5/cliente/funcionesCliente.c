@@ -22,10 +22,10 @@ void *reciveAndSendInClient(void *args) {
 		
 		strcpy(request.campo, tipo);           
 		strcpy(request.valor, valor); 
-		
+		printf("\nTIPO: %s - VALOR: %s\n", request.campo, request.valor);
 		send(dataClient->socket, (void*)&request, sizeof(t_request), 0); //Envio consulta al servidor
 		
-		read(dataClient->socket,(void*)&articulos,sizeof(t_articulo)); //Recivo respuesta del servidor
+		read(dataClient->socket,(void*)&articulos,sizeof(t_articulo)); //Recibo respuesta del servidor
 		
 		if(articulos.coincidencias > 0){
 			

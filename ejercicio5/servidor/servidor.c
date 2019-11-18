@@ -29,8 +29,9 @@ int main(int argc, char const *argv[])
 		printf("Para mas informacion solicite la ayuda con -h");
 		exit(0);
 	}
-	
+
 	strcpy(param.pathDatabase,argv[1]);
+
 	param.port = atoi(argv[2]);
 
 	//Inicializo el mutex
@@ -39,7 +40,7 @@ int main(int argc, char const *argv[])
         printf("\n Mutex init has failed\n");
         return -1;
     }
-
+	
 	// Creating socket file descriptor
 	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
 	{
