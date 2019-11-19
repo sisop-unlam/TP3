@@ -20,7 +20,7 @@ void procesarConsulta(char *consulta, char *memoriaCompartida, sem_t *semaforoMe
     char linea[512], *tipo, *valor;
     char **list;
     size_t len;
-    int i =0;
+    int i = 0;
     t_articulo art;
     ///para pasar el itemID de int a char
     char bufferItemID[10];
@@ -73,7 +73,7 @@ void procesarConsulta(char *consulta, char *memoriaCompartida, sem_t *semaforoMe
         }
         printf("Enviados %d registros\n", i);
         fflush(stdout);
-        if(!i)
+        if (!i)
         {
             const char noRows[] = "No se encontraron registros que coincidan con la busqueda.";
             sendMsg(noRows, memoriaCompartida, semaforoMemoria, respuestaEnviada, semaforoEnvio);

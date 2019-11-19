@@ -30,19 +30,19 @@ void salir()
     exit(1);
 }
 
-void set(const char* ip, const char* puerto)
+void set(const char *ip, const char *puerto)
 {
     bzero(&(serverAddress.sin_zero), 8);
-    serverAddress.sin_family=AF_INET;
+    serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = inet_addr(ip);
-    serverAddress.sin_port=htons(atoi(puerto));
+    serverAddress.sin_port = htons(atoi(puerto));
 }
 
 int main(int argc, char *argv[])
 {
 
     ///Si estoy pidiendole la help
-    if (strcmp(argv[1],"-help") == 0 || strcmp(argv[1],"-h") == 0 || strcmp(argv[1],"-?") == 0)
+    if (strcmp(argv[1], "-help") == 0 || strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "-?") == 0)
     {
         getHelp();
     }
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     ///Le paso IP y PUERTO
     set(argv[1], argv[2]);
 
-    if (connect(clientSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1)
+    if (connect(clientSocket, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1)
     {
         printf("Solicitud de conexion rechazada\n");
         return 1;
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
         longitud = atoi(respuesta);
         recv(clientSocket, respuesta, longitud, 0);
 
-        while (strcmp(respuesta,"FIN") != 0)
+        while (strcmp(respuesta, "FIN") != 0)
         {
             printf("%s\n", respuesta);
             memset(respuesta, 0, strlen(respuesta));
