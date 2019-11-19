@@ -23,8 +23,16 @@ int main(int argc, char *argv[])
     struct sockaddr_in ca;
     int socketCliente, serverSocket, sockfd, habilitar = 1;
     pthread_t tid;
+    if (argc <= 3)
+    {
+        printf("Por favor, ingrese una IP, un puerto y el archivo de base de datos\n");
+        printf("Ejemplos:\n");
+        printf("\t\t./Servidor 192.168.1.26 7777 db.txt\n");
+        printf("\t\t./Servidor 127.0.0.1 54222 ../base_de_datos.txt\n");
 
-    if (comprobacionBD(bd) == 1)
+        exit(255);
+    }
+    if (comprobacionBD(bd, argv[3]) == 1)
         return 1;
 
     if (creacionSocket(&serverSocket, &habilitar) == 1)

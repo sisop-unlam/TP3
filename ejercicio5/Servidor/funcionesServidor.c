@@ -137,14 +137,14 @@ void set(const char *ip, const char *puerto)
     configuracionSocket.sin_port = htons(atoi(puerto));
 }
 
-int comprobacionBD(char *bd)
+int comprobacionBD(char *bd, char* path)
 {
     ///Primero se comprueba que el archivo de la base de datos exista.
-    if (access(BD, F_OK) != -1)
-        strcpy(bd, BD);
+    if (access(path, F_OK) != -1)
+        strcpy(bd, path);
     else
     {
-        printf("El archivo de la base de datos no existe");
+        printf("El archivo de la base de datos no existe\n");
         return 1;
     }
 

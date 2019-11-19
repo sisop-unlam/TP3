@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
         printf("Por favor, ingrese un archivo de base de datos\n");
         printf("Ejemplos:\n");
         printf("\t\t./Servidor db.txt\n");
-        printf("\t\t./Cliente ../base_de_datos.txt\n");
+        printf("\t\t./Servidor ../base_de_datos.txt\n");
 
         exit(255);
     }

@@ -34,7 +34,7 @@ typedef struct
 struct sockaddr_in configuracionSocket;
 int bindListen(int *serverSocket);
 int creacionSocket(int *serverSocket, int *habilitar);
-int comprobacionBD(char *bd);
+int comprobacionBD(char *bd, char* path);
 void set(const char *ip, const char *puerto);
 
 ///funcionesServidor
