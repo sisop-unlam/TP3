@@ -15,12 +15,12 @@
    Fernández		    Jonathan		      37226233
 ***********************************************************************************
 */
-
+char bd[512];
 void *obtenerQuery(void *sockfdVoid)
 {
     int sockfd = *((int *)sockfdVoid);
     char query[TAMQUERY];
-    FILE *arch = fopen(BD, "rt");
+    FILE *arch = fopen(bd, "rt");
     recv(sockfd, query, TAMQUERY, 0);
 
     while (strcmp(query, "QUIT") != 0)
@@ -50,8 +50,7 @@ void obtenerTuplas(FILE *arch, int socketCliente, char *query)
     ///Vuelvo al inicio del archivo y me salteo la primer linea (la del encabezado)
     fseek(arch, 0, SEEK_SET);
     fscanf(arch, "%*[^\n]");
-    char *e = strrchr(query, '\n');
-    *e = '\0';
+
     ///Muestro por pantalla la query
     printf("\n%s\n", query);
     ///Hago un explode, similar al de PHP
@@ -137,11 +136,13 @@ void set(const char *ip, const char *puerto)
     configuracionSocket.sin_port = htons(atoi(puerto));
 }
 
-int comprobacionBD(char *bd, char *path)
+int comprobacionBD(char *path)
 {
     ///Primero se comprueba que el archivo de la base de datos exista.
     if (access(path, F_OK) != -1)
+    {
         strcpy(bd, path);
+    }
     else
     {
         printf("El archivo de la base de datos no existe\n");

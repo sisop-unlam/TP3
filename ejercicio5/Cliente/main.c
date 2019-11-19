@@ -74,7 +74,8 @@ int main(int argc, char *argv[])
     printf("Escriba QUIT para cerrar el programa\n");
     printf("Escriba una query: \n");
     fgets(query, sizeof(query), stdin);
-
+    char *e = strrchr(query, '\n');
+    *e = '\0';
     while (strcmp(query, "QUIT") != 0)
     {
         ///MANDO EL REQUEST
@@ -95,6 +96,8 @@ int main(int argc, char *argv[])
         printf("Escriba QUIT para cerrar el programa\n");
         printf("Escriba una query: \n");
         fgets(query, sizeof(query), stdin);
+        char *e = strrchr(query, '\n');
+        *e = '\0';
     }
 
     send(socketCliente, query, sizeof(query), 0);

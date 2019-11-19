@@ -18,7 +18,6 @@
 
 int main(int argc, char *argv[])
 {
-    char bd[500];
     socklen_t cl = sizeof(struct sockaddr_in);
     struct sockaddr_in ca;
     int socketCliente, serverSocket, sockfd, habilitar = 1;
@@ -32,7 +31,7 @@ int main(int argc, char *argv[])
 
         exit(255);
     }
-    if (comprobacionBD(bd, argv[3]) == 1)
+    if (comprobacionBD(argv[3]) == 1)
         return 1;
 
     if (creacionSocket(&serverSocket, &habilitar) == 1)
