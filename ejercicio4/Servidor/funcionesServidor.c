@@ -1,4 +1,3 @@
-#include "funciones.h"
 /*
 ***********************************************************************************
  Nombre Del Script:        Servidor
@@ -15,7 +14,9 @@
    Fernández		    Jonathan		      37226233
 ***********************************************************************************
 */
-void procesarConsulta(char *consulta, char *memoriaCompartida, sem_t *semaforoMemoria, sem_t *respuestaEnviada, sem_t *semaforoEnvio, FILE *arch)
+#include "funciones.h"
+
+void obtenerTuplas(FILE *arch, char *espacio, sem_t *respuestaEnviada, sem_t *semaforoMemoria, sem_t *semaforoEnvio, char *consulta)
 {
     char linea[512], *tipo, *valor;
     char **list;
@@ -54,20 +55,20 @@ void procesarConsulta(char *consulta, char *memoriaCompartida, sem_t *semaforoMe
             if (strcmp(tipo, "PRODUCTO") == 0 && strcmp(art.producto, valor) == 0)
             {
                 snprintf(linea, sizeof(linea), "%s;%s;%s;%s", bufferItemID, art.articulo, art.producto, art.marca);
-                sendMsg(linea, memoriaCompartida, semaforoMemoria, respuestaEnviada, semaforoEnvio);
+                sendMsg(respuestaEnviada, semaforoMemoria, semaforoEnvio, linea, espacio);
                 i++;
             }
             else if (strcmp(tipo, "ID") == 0 && strcmp(bufferItemID, valor) == 0)
             {
                 snprintf(linea, sizeof(linea), "%s;%s;%s;%s", bufferItemID, art.articulo, art.producto, art.marca);
-                sendMsg(linea, memoriaCompartida, semaforoMemoria, respuestaEnviada, semaforoEnvio);
+                sendMsg(respuestaEnviada, semaforoMemoria, semaforoEnvio, linea, espacio);
                 i++;
             }
             else if (strcmp(tipo, "MARCA") == 0 && strcmp(art.marca, valor) == 0)
             {
 
                 snprintf(linea, sizeof(linea), "%s;%s;%s;%s", bufferItemID, art.articulo, art.producto, art.marca);
-                sendMsg(linea, memoriaCompartida, semaforoMemoria, respuestaEnviada, semaforoEnvio);
+                sendMsg(respuestaEnviada, semaforoMemoria, semaforoEnvio, linea, espacio);
                 i++;
             }
         }
@@ -76,24 +77,39 @@ void procesarConsulta(char *consulta, char *memoriaCompartida, sem_t *semaforoMe
         if (!i)
         {
             const char noRows[] = "No se encontraron registros que coincidan con la busqueda.";
-            sendMsg(noRows, memoriaCompartida, semaforoMemoria, respuestaEnviada, semaforoEnvio);
+            sendMsg(respuestaEnviada, semaforoMemoria, semaforoEnvio, noRows, espacio);
         }
     }
     else
     {
         const char errorPedido[] = "Por favor, ingrese un campo válido (ID, MARCA o PRODUCTO).";
-        sendMsg(errorPedido, memoriaCompartida, semaforoMemoria, respuestaEnviada, semaforoEnvio);
+        sendMsg(respuestaEnviada, semaforoMemoria, semaforoEnvio, errorPedido, espacio);
     }
 
     /// CON ESTO, LE AVISO AL CLIENTE QUE YA NO HAY MAS DATOS PARA PROCESAR
-    sendMsg("FIN", memoriaCompartida, semaforoMemoria, respuestaEnviada, semaforoEnvio);
+    const char fin[] = "FIN";
+    sendMsg(respuestaEnviada, semaforoMemoria, semaforoEnvio, fin, espacio);
 }
 
-void sendMsg(const char *msg, char *memoriaCompartida, sem_t *semaforoMemoria, sem_t *respuestaEnviada, sem_t *semaforoEnvio)
+void sendMsg(sem_t *respuestaEnviada, sem_t *semaforoMemoria, sem_t *semaforoEnvio, const char *msg, char *espacio)
 {
     sem_wait(semaforoEnvio);
     sem_wait(semaforoMemoria);
-    strcpy(memoriaCompartida, msg);
+    strcpy(espacio, msg);
     sem_post(semaforoMemoria);
     sem_post(respuestaEnviada);
+}
+
+void getHelp()
+{
+    printf("\nEjercicio 4 (MEMORIA COMPARTIDA)\n================================\n\n");
+    printf("El fin del programa es comunicarse con un proceso Cliente\n");
+    printf("Este programa tiene una base de datos cargada, en la cual, en base a lo que el usuario\n");
+    printf("solicite, se buscaran coincidencias en el archivo y se enviaran al proceso cliente.\n");
+    printf("\nPARAMETROS\n==========\n");
+    printf("\n\nPATH ARCHIVO: base de datos que se utilizara para buscar los resultados");
+    printf("\n\nEJEMPLOS\n========\n");
+    printf("\t\t./Servidor \n");
+    printf("\t\t./Servidor <PATH ARCHIVO>\n");
+    exit(1);
 }

@@ -1,4 +1,3 @@
-#include "funciones.h"
 /*
 ***********************************************************************************
  Nombre Del Script:        Cliente
@@ -15,11 +14,21 @@
    Fernández		    Jonathan		      37226233
 ***********************************************************************************
 */
-void help()
+#include "funciones.h"
+
+void getHelp()
 {
-    printf("\n\n");
-    printf("Este programa realiza consultas hacia un proceso demonio para\n");
-    printf("obtener datos sobre un archivo.\n\n");
-    printf("Sintaxis de ejecución: \n");
-    printf("./hacerConsultas <consulta>\n");
+    printf("\nEjercicio 4 (MEMORIA COMPARTIDA)\n================================\n\n");
+    printf("El fin del programa es comunicarse con un proceso Servidor\n");
+    printf("el cual tiene una base de datos cargada. En base a lo que el usuario\n");
+    printf("necesite, ya sea buscar por MARCA, PRODUCTO o ID, el Servidor buscara\n");
+    printf("en el archivo de base de datos los registros coincidentes y los enviara al proceso cliente.\n");
+    printf("\nPARAMETROS\n==========\n");
+    printf("\n\nQUERY: la primer mitad es el parametro buscado (MARCA, PRODUCTO O ID)\n");
+    printf("\tla segunda parte ira seguida de un signo igual (=) y tendra el valor a buscar");
+    printf("\n\nEJEMPLOS\n========\n");
+    printf("\t\t./Cliente PRODUCTO=BOLSA\n");
+    printf("\t\t./Cliente ID=12\n");
+    printf("\t\t./Cliente MARCA=MIMAGO\n");
+    exit(1);
 }

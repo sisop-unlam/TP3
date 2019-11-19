@@ -1,4 +1,3 @@
-#include "funciones.h"
 /*
 ***********************************************************************************
  Nombre Del Script:        Servidor
@@ -15,6 +14,8 @@
    Fernández		    Jonathan		      37226233
 ***********************************************************************************
 */
+#include "funciones.h"
+
 char *strdup(const char *src)
 {
     char *tmp = malloc(strlen(src) + 1);

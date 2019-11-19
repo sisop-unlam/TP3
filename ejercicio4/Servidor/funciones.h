@@ -13,8 +13,7 @@
 #include <sys/ipc.h>
 #include <signal.h>
 #include <ctype.h>
-#define BD "./articulos.txt"
-#define TAM_CONSULTA 512
+#define TAMQUERY 200
 
 typedef struct
 {
@@ -24,15 +23,14 @@ typedef struct
     char marca[512];
 } t_articulo;
 
-void error(char *);
-void help();
-void leerConsultas(char *);
-void procesarConsulta(char *consulta, char *memoriaCompartida, sem_t *semaforoMemoria, sem_t *respuestaEnviada, sem_t *semaforoEnvio, FILE *arch);
-FILE *abrirArchivo(char *path);
-void recorrerArchivo(char *memoriaCompartida, char *linea, char *buscado, int columna, sem_t *semaforoMemoria, sem_t *respuestaEnviada, sem_t *semaforoEnvio, FILE *arch);
-void sendMsg(const char *, char *, sem_t *, sem_t *, sem_t *);
+void getHelp();
+void liberarRecursos();
+
+void obtenerTuplas(FILE *arch, char *espacio, sem_t *respuestaEnviada, sem_t *semaforoMemoria, sem_t *semaforoEnvio, char *consulta);
+void sendMsg(sem_t *respuestaEnviada, sem_t *semaforoMemoria, sem_t *semaforoEnvio, const char *msg, char *espacio);
+
+///UTILITARIO
 void explode(const char *src, const char *tokens, char ***list, size_t *len);
 char *strdup(const char *src);
-void liberarRecursos();
 
 #endif
