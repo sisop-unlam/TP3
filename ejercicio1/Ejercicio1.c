@@ -1,3 +1,19 @@
+/*
+***********************************************************************************
+ Nombre Del Script:        Ejercicio1
+ Trabajo Practico Nro.:    3
+ Ejercicio Nro.:           1
+ Entrega Nro.:             1
+ Integrantes:
+    Apellido            Nombre                  DNI
+    --------------------------------------------------
+   Krasuk               Joaquín               40745090
+   Rodriguez            Christian             37947646
+   Vivas                Pablo                 38703964
+   Ramos		        Maximiliano		      35068917
+   Fernández		    Jonathan		      37226233
+***********************************************************************************
+*/
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/types.h>

@@ -29,24 +29,23 @@ int main(int argc, char *argv[])
     char respuesta[512] = "";
 
     ///Primero hago una comprobacion de la cantidad de argumentos
-    if(argc < 2)
+    if (argc < 2)
     {
         printf("\nIngrese una consulta por favor.");
         return 1;
     }
 
-    if(argc > 2)
+    if (argc > 2)
     {
         printf("\nIngrese un unico parametro.");
         return 2;
     }
 
     ///Si estoy pidiendole la help
-    if (strcmp(argv[1],"-help") == 0 || strcmp(argv[1],"-h") == 0 || strcmp(argv[1],"-?") == 0)
+    if (strcmp(argv[1], "-help") == 0 || strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "-?") == 0)
     {
         help();
     }
-
 
     ///Inicializo el area de memoria compartida
     shmid = shmget(234, TAM_CONSULTA, IPC_CREAT | 0666);
@@ -59,7 +58,7 @@ int main(int argc, char *argv[])
 
     hacerConsulta(argv[1]);
 
-    while (strcmp(respuesta,"FIN") != 0)
+    while (strcmp(respuesta, "FIN") != 0)
     {
         printf("%s\n", respuesta);
 
@@ -77,7 +76,7 @@ int main(int argc, char *argv[])
     sem_close(semaforoEnvio);
 }
 
-void hacerConsulta(char* query)
+void hacerConsulta(char *query)
 {
     sem_wait(semaforoConsulta);
     sem_wait(semaforoMemoria);

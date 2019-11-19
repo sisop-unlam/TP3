@@ -15,6 +15,6 @@
 #define TAM_CONSULTA 512
 
 void help();
-void hacerConsulta(char* query);
+void hacerConsulta(char *query);
 
 #endif // FUNCIONES_H_INCLUDED
