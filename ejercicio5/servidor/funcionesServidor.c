@@ -36,12 +36,14 @@ void *resolverConsulta(t_conexionCliente *conexionCliente, t_request *req, FILE 
 
 	pthread_mutex_lock(&mutex);
 	char linea[200];
+fflush(stdout);
+printf("\nReinicio el archivo");fflush(stdout);
 
 	fseek(archivo, 0, SEEK_SET);
 	fscanf(archivo, "%*[^\n]");
 	fgets(linea, 200, archivo);
-
-	char delimitador[] = ";\n";
+	char* e;
+	char delimitador[] = ";";
 	t_articulo art;
 	art.coincidencias = 0;
 
@@ -52,9 +54,15 @@ void *resolverConsulta(t_conexionCliente *conexionCliente, t_request *req, FILE 
 		while (feof(archivo) == 0)
 		{
 
-			/*printf("\n|%s", linea);
-			fflush(stdout);
-*/
+			e=strrchr(linea,'\n');
+			*e='\0';
+			e=strrchr(linea,'\n');
+			if(e)
+				*e='\0';
+			e=strrchr(linea,'\r');
+			if(e)
+				*e='\0';
+
 			char *item_id = strtok(linea, delimitador);
 			char *articulo = strtok(NULL, delimitador);
 			char *producto = strtok(NULL, delimitador);

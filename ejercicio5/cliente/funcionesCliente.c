@@ -32,7 +32,7 @@ void *reciveAndSendInClient(void *args)
 		{
 
 			printf("Se encontraron %d coincidencias:\n", articulos.coincidencias);
-			for (int i = 0; i < articulos.coincidencias - 1; i++)
+			for (int i = 0; i < articulos.coincidencias; i++)
 			{
 				printf("Id: %s\tArticulos: %s\tProducto: %s\tMarca: %s\n", articulos.item_id[i], articulos.articulo[i], articulos.producto[i], articulos.marca[i]);
 			}
