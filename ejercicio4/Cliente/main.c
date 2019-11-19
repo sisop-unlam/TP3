@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
     if (argc > 2)
     {
-        printf("\nIngrese un unico parametro.");
+        printf("\nIngrese un unico parametro.\n");
         return 2;
     }
 
