@@ -23,9 +23,9 @@ void *obtenerQuery(void *sockfdVoid)
     FILE *arch = fopen(BD, "rt");
     recv(sockfd, query, TAMQUERY, 0);
 
-    while (strcmp(query, "SALIR") != 0)
+    while (strcmp(query, "QUIT") != 0)
     {
-        procesarConsulta(query, arch, sockfd);
+        obtenerTuplas(arch, sockfd, query);
         recv(sockfd, query, TAMQUERY, 0);
     }
     printf("[CONEXION TERMINADA] Un usuario se ha desconectado\n");
@@ -35,7 +35,7 @@ void *obtenerQuery(void *sockfdVoid)
     close(sockfd);
 }
 
-void procesarConsulta(char *query, FILE *arch, int clientSocket)
+void obtenerTuplas(FILE *arch, int socketCliente, char *query)
 {
     char linea[512], *tipo, *valor;
     char **list;
@@ -45,7 +45,7 @@ void procesarConsulta(char *query, FILE *arch, int clientSocket)
 
     ///para pasar el itemID de int a char
     char bufferItemID[10];
-    char packetSize[10];
+    char tamPaquete[10];
 
     ///Vuelvo al inicio del archivo y me salteo la primer linea (la del encabezado)
     fseek(arch, 0, SEEK_SET);
@@ -76,22 +76,21 @@ void procesarConsulta(char *query, FILE *arch, int clientSocket)
             if (strcmp(tipo, "PRODUCTO") == 0 && strcmp(art.producto, valor) == 0)
             {
                 snprintf(linea, sizeof(linea), "%s;%s;%s;%s", bufferItemID, art.articulo, art.producto, art.marca);
-                enviarMensaje(linea, clientSocket, packetSize);
-                usleep(1 * 1000);
+                enviarMensaje(linea, socketCliente, tamPaquete);
+                usleep(1 * 1000); ///Para enviar correctamente via RED
                 i++;
             }
             else if (strcmp(tipo, "ID") == 0 && strcmp(bufferItemID, valor) == 0)
             {
                 snprintf(linea, sizeof(linea), "%s;%s;%s;%s", bufferItemID, art.articulo, art.producto, art.marca);
-                enviarMensaje(linea, clientSocket, packetSize);
+                enviarMensaje(linea, socketCliente, tamPaquete);
                 usleep(1 * 1000);
-
                 i++;
             }
             else if (strcmp(tipo, "MARCA") == 0 && strcmp(art.marca, valor) == 0)
             {
                 snprintf(linea, sizeof(linea), "%s;%s;%s;%s", bufferItemID, art.articulo, art.producto, art.marca);
-                enviarMensaje(linea, clientSocket, packetSize);
+                enviarMensaje(linea, socketCliente, tamPaquete);
                 usleep(1 * 1000);
                 i++;
             }
@@ -101,41 +100,41 @@ void procesarConsulta(char *query, FILE *arch, int clientSocket)
         if (!i)
         {
             const char noRows[] = "No se encontraron registros que coincidan con la busqueda.";
-            enviarMensaje(noRows, clientSocket, packetSize);
+            enviarMensaje(noRows, socketCliente, tamPaquete);
         }
     }
     else
     {
         const char errorPedido[] = "Por favor, ingrese un campo válido (ID, MARCA o PRODUCTO).";
-        enviarMensaje(errorPedido, clientSocket, packetSize);
+        enviarMensaje(errorPedido, socketCliente, tamPaquete);
     }
 
     const char fin[] = "FIN";
-    enviarMensaje(fin, clientSocket, packetSize);
+    enviarMensaje(fin, socketCliente, tamPaquete);
 }
 
-void enviarMensaje(const char *mensaje, int clientSocket, char *packetSize)
+void enviarMensaje(const char *mensaje, int socketCliente, char *tamPaquete)
 {
     if (strcmp(mensaje, "FIN") != 0)
     {
-        sprintf(packetSize, "%lu", strlen(mensaje));
-        send(clientSocket, packetSize, sizeof(int), 0);
-        send(clientSocket, mensaje, strlen(mensaje), 0);
+        sprintf(tamPaquete, "%lu", strlen(mensaje));
+        send(socketCliente, tamPaquete, sizeof(int), 0);
+        send(socketCliente, mensaje, strlen(mensaje), 0);
     }
     else
     {
-        sprintf(packetSize, "%d", (int)sizeof(mensaje));
-        send(clientSocket, packetSize, sizeof(int), 0);
-        send(clientSocket, mensaje, sizeof(mensaje), 0);
+        sprintf(tamPaquete, "%d", (int)sizeof(mensaje));
+        send(socketCliente, tamPaquete, sizeof(int), 0);
+        send(socketCliente, mensaje, sizeof(mensaje), 0);
     }
 }
 
 void set(const char *ip, const char *puerto)
 {
-    bzero(&(serverAddress.sin_zero), 8);
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = inet_addr(ip);
-    serverAddress.sin_port = htons(atoi(puerto));
+    bzero(&(configuracionSocket.sin_zero), 8);
+    configuracionSocket.sin_family = AF_INET;
+    configuracionSocket.sin_addr.s_addr = inet_addr(ip);
+    configuracionSocket.sin_port = htons(atoi(puerto));
 }
 
 int comprobacionBD(char *bd)
@@ -174,7 +173,7 @@ int creacionSocket(int *serverSocket, int *habilitar)
 int bindListen(int *serverSocket)
 {
     ///Vinculo el socket con la configuracion
-    if (bind(*serverSocket, (struct sockaddr *)&serverAddress, sizeof(struct sockaddr_in)) < 0)
+    if (bind(*serverSocket, (struct sockaddr *)&configuracionSocket, sizeof(struct sockaddr_in)) < 0)
     {
         printf("No se pudo vincular el socket con la configuración del servidor.");
         return 1;
@@ -187,14 +186,14 @@ int bindListen(int *serverSocket)
     return 0;
 }
 
-void aceptarRequests(pthread_t *tid, int *clientSocket, int *serverSocket, struct sockaddr_in *ca, socklen_t *cl)
+void aceptarRequests(pthread_t *tid, int *socketCliente, int *serverSocket, struct sockaddr_in *ca, socklen_t *cl)
 {
-    *clientSocket = accept(*serverSocket, (struct sockaddr *)ca, cl);
+    *socketCliente = accept(*serverSocket, (struct sockaddr *)ca, cl);
 
     printf("[NUEVA CONEXION] Un cliente nuevo se conecto al servidor.\n");
     fflush(stdout);
 
     ///Tengo que crear un hilo por cada usuario
     ///De esta forma, aseguro que no se crucen
-    pthread_create(tid, NULL, &obtenerQuery, clientSocket);
+    pthread_create(tid, NULL, &obtenerQuery, socketCliente);
 }

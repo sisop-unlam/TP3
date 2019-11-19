@@ -18,28 +18,34 @@
 
 char respuesta[TAMQUERY];
 char query[TAMQUERY];
-int clientSocket;
+int socketCliente;
 int longitud;
 
 void salir()
 {
     printf("\nFinalizando el proceso...\n");
-    strcpy(query, "SALIR");
-    send(clientSocket, query, sizeof(query), 0);
-    close(clientSocket);
+    strcpy(query, "QUIT");
+    send(socketCliente, query, sizeof(query), 0);
+    close(socketCliente);
     exit(1);
 }
 
 void set(const char *ip, const char *puerto)
 {
-    bzero(&(serverAddress.sin_zero), 8);
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = inet_addr(ip);
-    serverAddress.sin_port = htons(atoi(puerto));
+    bzero(&(configuracionSocket.sin_zero), 8);
+    configuracionSocket.sin_family = AF_INET;
+    configuracionSocket.sin_addr.s_addr = inet_addr(ip);
+    configuracionSocket.sin_port = htons(atoi(puerto));
 }
 
 int main(int argc, char *argv[])
 {
+    if (argc <= 2)
+    {
+        printf("\nInserte los parametros necesarios");
+        getHelp();
+        exit(255);
+    }
 
     ///Si estoy pidiendole la help
     if (strcmp(argv[1], "-help") == 0 || strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "-?") == 0)
@@ -50,7 +56,7 @@ int main(int argc, char *argv[])
     signal(SIGINT, salir);
     signal(SIGTERM, salir);
 
-    if ((clientSocket = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+    if ((socketCliente = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
         printf("No se pudo crear el socket!\n");
         return 1;
@@ -59,38 +65,38 @@ int main(int argc, char *argv[])
     ///Le paso IP y PUERTO
     set(argv[1], argv[2]);
 
-    if (connect(clientSocket, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1)
+    if (connect(socketCliente, (struct sockaddr *)&configuracionSocket, sizeof(configuracionSocket)) == -1)
     {
         printf("Solicitud de conexion rechazada\n");
         return 1;
     }
 
-    printf("Escriba SALIR para cerrar el programa\n");
+    printf("Escriba QUIT para cerrar el programa\n");
     printf("Escriba una query: \n");
     scanf("%s", query);
 
-    while (strcmp(query, "SALIR") != 0)
+    while (strcmp(query, "QUIT") != 0)
     {
         ///MANDO EL REQUEST
-        send(clientSocket, query, sizeof(query), 0);
-        recv(clientSocket, respuesta, sizeof(int), 0);
+        send(socketCliente, query, sizeof(query), 0);
+        recv(socketCliente, respuesta, sizeof(int), 0);
         longitud = atoi(respuesta);
-        recv(clientSocket, respuesta, longitud, 0);
+        recv(socketCliente, respuesta, longitud, 0);
 
         while (strcmp(respuesta, "FIN") != 0)
         {
             printf("%s\n", respuesta);
             memset(respuesta, 0, strlen(respuesta));
-            recv(clientSocket, respuesta, sizeof(int), 0);
+            recv(socketCliente, respuesta, sizeof(int), 0);
             longitud = atoi(respuesta);
-            recv(clientSocket, respuesta, longitud, 0);
+            recv(socketCliente, respuesta, longitud, 0);
         }
 
-        printf("Escriba SALIR para cerrar el programa\n");
+        printf("Escriba QUIT para cerrar el programa\n");
         printf("Escriba una query: \n");
         scanf("%s", query);
     }
 
-    send(clientSocket, query, sizeof(query), 0);
-    close(clientSocket);
+    send(socketCliente, query, sizeof(query), 0);
+    close(socketCliente);
 }

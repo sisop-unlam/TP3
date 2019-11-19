@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     char bd[500];
     socklen_t cl = sizeof(struct sockaddr_in);
     struct sockaddr_in ca;
-    int clientSocket, serverSocket, sockfd, habilitar = 1;
+    int socketCliente, serverSocket, sockfd, habilitar = 1;
     pthread_t tid;
 
     if (comprobacionBD(bd) == 1)
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 
     ///Lo dejo corriendo como demonio
     while (1)
-        aceptarRequests(&tid, &clientSocket, &serverSocket, &ca, &cl);
+        aceptarRequests(&tid, &socketCliente, &serverSocket, &ca, &cl);
 
     return 0;
 }

@@ -16,9 +16,9 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-#define TAMQUERY 512
+#define TAMQUERY 200
 
 void getHelp();
-struct sockaddr_in serverAddress;
+struct sockaddr_in configuracionSocket;
 
 #endif // FUNCIONES_H_INCLUDED
