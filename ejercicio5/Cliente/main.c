@@ -76,8 +76,14 @@ int main(int argc, char *argv[])
     fgets(query, sizeof(query), stdin);
     char *e = strrchr(query, '\n');
     *e = '\0';
+    char * separator = "=";
+    char * elementosDespuesDeSeparador ;
+
+    elementosDespuesDeSeparador = strrchr(query, '=');
     while (strcmp(query, "QUIT") != 0)
     {
+
+        if(elementosDespuesDeSeparador&&strlen(query) > 1 &&strlen(elementosDespuesDeSeparador)>1){
         ///MANDO EL REQUEST
         send(socketCliente, query, sizeof(query), 0);
         recv(socketCliente, respuesta, sizeof(int), 0);
@@ -92,12 +98,16 @@ int main(int argc, char *argv[])
             longitud = atoi(respuesta);
             recv(socketCliente, respuesta, longitud, 0);
         }
-
+} else{
+    printf("Escriba una consulta\n");
+}
         printf("Escriba QUIT para cerrar el programa\n");
         printf("Escriba una query: \n");
         fgets(query, sizeof(query), stdin);
         char *e = strrchr(query, '\n');
         *e = '\0';
+    elementosDespuesDeSeparador = strrchr(query, '=');
+
     }
 
     send(socketCliente, query, sizeof(query), 0);
