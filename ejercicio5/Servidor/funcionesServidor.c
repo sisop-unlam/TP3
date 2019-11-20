@@ -28,7 +28,7 @@ void *obtenerQuery(void *sockfdVoid)
         obtenerTuplas(arch, sockfd, query);
         recv(sockfd, query, TAMQUERY, 0);
     }
-    log_message(LOG_FILE,"[CONEXION TERMINADA] Un usuario se ha desconectado\n");
+    log_message(LOG_FILE, "[CONEXION TERMINADA] Un usuario se ha desconectado\n");
     fflush(stdout);
 
     fclose(arch);
@@ -96,10 +96,10 @@ void obtenerTuplas(FILE *arch, int socketCliente, char *query)
                 i++;
             }
         }
-                    char enviadosNRegistros[25];
+        char enviadosNRegistros[25];
         sprintf(enviadosNRegistros, "Enviados %d registros\n", i);
-   
-    log_message(LOG_FILE, enviadosNRegistros);
+
+        log_message(LOG_FILE, enviadosNRegistros);
         fflush(stdout);
         if (!i)
         {
@@ -188,7 +188,7 @@ int bindListen(int *serverSocket)
     /// Empiezo a escuchar en el puerto espeificado anteriormente
     listen(*serverSocket, MAX_QUEUE);
     char esperandoConexion[100];
-    sprintf(esperandoConexion, "Esperando conexiones en el puerto %d...\n", ntohs (configuracionSocket.sin_port));
+    sprintf(esperandoConexion, "Esperando conexiones en el puerto %d...\n", ntohs(configuracionSocket.sin_port));
     printf("%s", esperandoConexion);
     log_message(LOG_FILE, esperandoConexion);
 

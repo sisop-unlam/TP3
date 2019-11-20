@@ -16,39 +16,46 @@
 ***********************************************************************************
 */
 
-int obtenerIP(char * ip){
-        struct ifaddrs *iflist, *iface;
+int obtenerIP(char *ip)
+{
+    struct ifaddrs *iflist, *iface;
 
-    if (getifaddrs(&iflist) < 0) {
+    if (getifaddrs(&iflist) < 0)
+    {
         perror("getifaddrs");
         return 1;
     }
 
-    for (iface = iflist; iface; iface = iface->ifa_next) {
+    for (iface = iflist; iface; iface = iface->ifa_next)
+    {
         int af = iface->ifa_addr->sa_family;
         const void *addr;
         char addrp[INET6_ADDRSTRLEN];
 
-        switch (af) {
-            case AF_INET:
-                addr = &((struct sockaddr_in *)iface->ifa_addr)->sin_addr;
-                break;
-            case AF_INET6:
-                addr = &((struct sockaddr_in6 *)iface->ifa_addr)->sin6_addr;
-                break;
-            default:
-                addr = NULL;
+        switch (af)
+        {
+        case AF_INET:
+            addr = &((struct sockaddr_in *)iface->ifa_addr)->sin_addr;
+            break;
+        case AF_INET6:
+            addr = &((struct sockaddr_in6 *)iface->ifa_addr)->sin6_addr;
+            break;
+        default:
+            addr = NULL;
         }
 
-        if (addr) {
-            if (inet_ntop(af, addr, addrp, sizeof addrp) == NULL) {
+        if (addr)
+        {
+            if (inet_ntop(af, addr, addrp, sizeof addrp) == NULL)
+            {
                 perror("inet_ntop");
                 continue;
             }
-            if(!strcmp(iface->ifa_name, "lo") == 0){
-            printf("La direccion del servidor es %s\n", addrp);
-            strcpy(ip, addrp);
-            return 0;
+            if (!strcmp(iface->ifa_name, "lo") == 0)
+            {
+                printf("La direccion del servidor es %s\n", addrp);
+                strcpy(ip, addrp);
+                return 0;
             }
         }
     }

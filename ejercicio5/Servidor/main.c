@@ -19,13 +19,12 @@ char ip[16];
 int main(int argc, char *argv[])
 {
 
-
     socklen_t cl = sizeof(struct sockaddr_in);
     struct sockaddr_in ca;
     int socketCliente, serverSocket, sockfd, habilitar = 1;
     pthread_t tid;
     /* Variables de los demonios */
-	pid_t pid, sid;
+    pid_t pid, sid;
 
     if (argc <= 2)
     {
@@ -38,8 +37,9 @@ int main(int argc, char *argv[])
     }
     if (comprobacionBD(argv[2]) == 1)
         return 1;
-        
-    if(obtenerIP(ip)){
+
+    if (obtenerIP(ip))
+    {
         printf("\nOcurrio un error al determina la IP local.\n");
         exit(1);
     }
@@ -52,26 +52,27 @@ int main(int argc, char *argv[])
 
     bindListen(&serverSocket);
 
-
     /* Hago un fork */
     pid = fork();
-    
+
     //Si no pude hacer el fork, salgo
-    if (pid < 0) {
+    if (pid < 0)
+    {
         exit(56);
     }
 
     //Si hizo bien el fork, puedo salir del "main"
-    if (pid > 0) { //El hijo se sigue ejecutando
-            exit(50);
+    if (pid > 0)
+    { //El hijo se sigue ejecutando
+        exit(50);
     }
-    
 
     umask(0);
 
     //Creo el SID
     sid = setsid();
-    if (sid < 0) {
+    if (sid < 0)
+    {
         exit(56);
     }
 
@@ -95,5 +96,4 @@ int main(int argc, char *argv[])
         aceptarRequests(&tid, &socketCliente, &serverSocket, &ca, &cl);
 
     return 0;
-
 }
