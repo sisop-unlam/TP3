@@ -176,13 +176,13 @@ int bindListen(int *serverSocket)
     ///Vinculo el socket con la configuracion
     if (bind(*serverSocket, (struct sockaddr *)&configuracionSocket, sizeof(struct sockaddr_in)) < 0)
     {
-        printf("No se pudo vincular el socket con la configuración del servidor.");
-        return 1;
+        printf("El puerto ingresado ya esta siendo utilizado.\n");
+        exit(1);
     }
 
     /// Empiezo a escuchar en el puerto espeificado anteriormente
     listen(*serverSocket, MAX_QUEUE);
-    printf("Esperando conexiones...\n");
+    printf("Esperando conexiones en el puerto %d...\n", ntohs (configuracionSocket.sin_port));
     fflush(stdout);
     return 0;
 }

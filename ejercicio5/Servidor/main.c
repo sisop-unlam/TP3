@@ -15,30 +15,36 @@
    Fernández		    Jonathan		      37226233
 ***********************************************************************************
 */
-
+char ip[16];
 int main(int argc, char *argv[])
 {
     socklen_t cl = sizeof(struct sockaddr_in);
     struct sockaddr_in ca;
     int socketCliente, serverSocket, sockfd, habilitar = 1;
     pthread_t tid;
-    if (argc <= 3)
+
+    if(obtenerIP(ip)){
+        printf("\nOcurrio un error al determina la IP local.\n");
+        exit(1);
+    }
+
+    if (argc <= 2)
     {
-        printf("Por favor, ingrese una IP, un puerto y el archivo de base de datos\n");
+        printf("Por favor, ingrese un puerto y el archivo de base de datos\n");
         printf("Ejemplos:\n");
-        printf("\t\t./Servidor 192.168.1.26 7777 db.txt\n");
-        printf("\t\t./Servidor 127.0.0.1 54222 ../base_de_datos.txt\n");
+        printf("\t\t./Servidor 7777 db.txt\n");
+        printf("\t\t./Servidor 54222 ../base_de_datos.txt\n");
 
         exit(255);
     }
-    if (comprobacionBD(argv[3]) == 1)
+    if (comprobacionBD(argv[2]) == 1)
         return 1;
 
     if (creacionSocket(&serverSocket, &habilitar) == 1)
         return 1;
 
     ///Le paso IP y PUERTO
-    set(argv[1], argv[2]);
+    set(ip, argv[1]);
 
     bindListen(&serverSocket);
 

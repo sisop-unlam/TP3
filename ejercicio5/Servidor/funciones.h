@@ -22,6 +22,10 @@
 #define TAMQUERY 200
 #define MAX_QUEUE 10
 ///STRUCT DE ARTICULO
+#include <sys/types.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <ifaddrs.h>
 typedef struct
 {
     int item_id;
@@ -46,4 +50,5 @@ void aceptarRequests(pthread_t *tid, int *socketCliente, int *serverSocket, stru
 void sendMsg(const char *, char *, sem_t *, sem_t *, sem_t *);
 void explode(const char *src, const char *tokens, char ***list, size_t *len);
 char *strdup(const char *src);
+int obtenerIP(char * ip);
 #endif
