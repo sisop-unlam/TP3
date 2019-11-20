@@ -26,6 +26,7 @@
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <ifaddrs.h>
+#define LOG_FILE "./log.txt"
 typedef struct
 {
     int item_id;
@@ -51,4 +52,7 @@ void sendMsg(const char *, char *, sem_t *, sem_t *, sem_t *);
 void explode(const char *src, const char *tokens, char ***list, size_t *len);
 char *strdup(const char *src);
 int obtenerIP(char * ip);
+void signal_handler(int sig);
+
+void log_message(char *filename, char *message);
 #endif

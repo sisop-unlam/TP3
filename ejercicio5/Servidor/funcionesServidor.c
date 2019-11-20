@@ -28,7 +28,7 @@ void *obtenerQuery(void *sockfdVoid)
         obtenerTuplas(arch, sockfd, query);
         recv(sockfd, query, TAMQUERY, 0);
     }
-    printf("[CONEXION TERMINADA] Un usuario se ha desconectado\n");
+    log_message(LOG_FILE,"[CONEXION TERMINADA] Un usuario se ha desconectado\n");
     fflush(stdout);
 
     fclose(arch);
@@ -51,8 +51,10 @@ void obtenerTuplas(FILE *arch, int socketCliente, char *query)
     fseek(arch, 0, SEEK_SET);
     fscanf(arch, "%*[^\n]");
 
+    char consulta[50];
+    sprintf(consulta, "%s - ", query);
     ///Muestro por pantalla la query
-    printf("\n%s\n", query);
+    log_message(LOG_FILE, consulta);
     ///Hago un explode, similar al de PHP
     ///En un array dejo el valor y el campo buscado
     explode(query, "=", &list, &len);
@@ -94,7 +96,10 @@ void obtenerTuplas(FILE *arch, int socketCliente, char *query)
                 i++;
             }
         }
-        printf("Enviados %d registros\n", i);
+                    char enviadosNRegistros[25];
+        sprintf(enviadosNRegistros, "Enviados %d registros\n", i);
+   
+    log_message(LOG_FILE, enviadosNRegistros);
         fflush(stdout);
         if (!i)
         {
@@ -182,7 +187,11 @@ int bindListen(int *serverSocket)
 
     /// Empiezo a escuchar en el puerto espeificado anteriormente
     listen(*serverSocket, MAX_QUEUE);
-    printf("Esperando conexiones en el puerto %d...\n", ntohs (configuracionSocket.sin_port));
+    char esperandoConexion[100];
+    sprintf(esperandoConexion, "Esperando conexiones en el puerto %d...\n", ntohs (configuracionSocket.sin_port));
+    printf("%s", esperandoConexion);
+    log_message(LOG_FILE, esperandoConexion);
+
     fflush(stdout);
     return 0;
 }
@@ -191,7 +200,7 @@ void aceptarRequests(pthread_t *tid, int *socketCliente, int *serverSocket, stru
 {
     *socketCliente = accept(*serverSocket, (struct sockaddr *)ca, cl);
 
-    printf("[NUEVA CONEXION] Un cliente nuevo se conecto al servidor.\n");
+    log_message(LOG_FILE, "[NUEVA CONEXION] Un cliente nuevo se conecto al servidor.\n");
     fflush(stdout);
 
     ///Tengo que crear un hilo por cada usuario

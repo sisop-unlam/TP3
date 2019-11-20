@@ -18,11 +18,14 @@
 char ip[16];
 int main(int argc, char *argv[])
 {
+
+
     socklen_t cl = sizeof(struct sockaddr_in);
     struct sockaddr_in ca;
     int socketCliente, serverSocket, sockfd, habilitar = 1;
     pthread_t tid;
-
+    /* Variables de los demonios */
+	pid_t pid, sid;
     if(obtenerIP(ip)){
         printf("\nOcurrio un error al determina la IP local.\n");
         exit(1);
@@ -48,9 +51,48 @@ int main(int argc, char *argv[])
 
     bindListen(&serverSocket);
 
+
+    /* Hago un fork */
+    pid = fork();
+    
+    //Si no pude hacer el fork, salgo
+    if (pid < 0) {
+        exit(56);
+    }
+
+    //Si hizo bien el fork, puedo salir del "main"
+    if (pid > 0) { //El hijo se sigue ejecutando
+            exit(50);
+    }
+    
+
+    umask(0);
+
+    //Creo el SID
+    sid = setsid();
+    if (sid < 0) {
+        exit(56);
+    }
+
+    //Cierro los streams, no hace falta tenerlos abiertos
+    close(STDIN_FILENO);
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
+
+    //estas senales las ignora
+    signal(SIGCHLD, SIG_IGN);
+    signal(SIGTSTP, SIG_IGN);
+    signal(SIGTTOU, SIG_IGN);
+    signal(SIGTTIN, SIG_IGN);
+
+    //aca handlea
+    signal(SIGHUP, signal_handler);
+    signal(SIGTERM, signal_handler);
+
     ///Lo dejo corriendo como demonio
     while (1)
         aceptarRequests(&tid, &socketCliente, &serverSocket, &ca, &cl);
 
     return 0;
+
 }

@@ -108,3 +108,27 @@ free_and_exit:
     *list = _list;
     free(copy);
 }
+
+void signal_handler(int sig)
+{
+    switch (sig)
+    {
+    case SIGHUP:
+        log_message(LOG_FILE, "Proceso finalizado.\n");
+        exit(0);
+        break;
+    case SIGTERM:
+        log_message(LOG_FILE, "Proceso finalizado.\n");
+        exit(0);
+        break;
+    }
+}
+void log_message(char *filename, char *message)
+{
+    FILE *logfile;
+    logfile = fopen(filename, "a");
+    if (!logfile)
+        return;
+    fprintf(logfile, "%s", message);
+    fclose(logfile);
+}
