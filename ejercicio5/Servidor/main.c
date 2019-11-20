@@ -26,10 +26,6 @@ int main(int argc, char *argv[])
     pthread_t tid;
     /* Variables de los demonios */
 	pid_t pid, sid;
-    if(obtenerIP(ip)){
-        printf("\nOcurrio un error al determina la IP local.\n");
-        exit(1);
-    }
 
     if (argc <= 2)
     {
@@ -42,6 +38,11 @@ int main(int argc, char *argv[])
     }
     if (comprobacionBD(argv[2]) == 1)
         return 1;
+        
+    if(obtenerIP(ip)){
+        printf("\nOcurrio un error al determina la IP local.\n");
+        exit(1);
+    }
 
     if (creacionSocket(&serverSocket, &habilitar) == 1)
         return 1;
